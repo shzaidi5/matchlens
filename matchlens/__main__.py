@@ -6,6 +6,7 @@
     python -m matchlens check                 # one live run of the agent desk
     python -m matchlens warm                  # pre-write agent copy for the demo profiles
     python -m matchlens serve
+    python -m matchlens publish --speed 30    # send the match to Event Hubs as it happens
 """
 
 from __future__ import annotations
@@ -94,6 +95,21 @@ async def _check(meta: dict, events: list[dict]) -> int:
     return 1
 
 
+async def _publish(meta: dict, events: list[dict], speed: float, start: float) -> None:
+    from .pipeline.eventhub import EventHubSender, publish, settings
+
+    cfg = settings()
+    if cfg is None:
+        sys.exit("Live ingest is off. Set EVENTHUB_NAMESPACE in .env (see .env.example).")
+    sender = EventHubSender(cfg, meta["match_id"])
+    print(f"Publishing {meta['match_id']} to {cfg['namespace']}/{cfg['name']} at {speed}x. Ctrl+C to stop.", file=sys.stderr)
+    try:
+        run, sent = await publish(events, meta["match_id"], sender, speed=speed, start=start)
+    finally:
+        await sender.close()
+    print(f"Run {run}: sent {sent} events.")
+
+
 def main(argv: list[str] | None = None) -> None:
     load_dotenv()
     parser = argparse.ArgumentParser(prog="matchlens", description=__doc__.split("\n")[0])
@@ -109,6 +125,7 @@ def main(argv: list[str] | None = None) -> None:
         ("export", "write one overlay track"),
         ("warm", "pre-write agent copy so replays are instant"),
         ("check", "one live run of the agent desk"),
+        ("publish", "send a match to Event Hubs, paced like a live feed"),
     ):
         p = sub.add_parser(name, help=help_)
         p.add_argument("--data", default=str(ROOT / "data"))
@@ -119,6 +136,9 @@ def main(argv: list[str] | None = None) -> None:
             p.add_argument("--agents", action="store_true", help="narrate with the agent desk instead of templates")
         if name == "export":
             p.add_argument("--format", choices=("json", "vtt"), default="json")
+        if name == "publish":
+            p.add_argument("--speed", type=float, default=30.0, help="match seconds per real second")
+            p.add_argument("--start", type=float, default=0.0, help="match time to start from (seconds)")
 
     s = sub.add_parser("serve", help="start the API and live viewer")
     s.add_argument("--host", default="127.0.0.1")
@@ -138,6 +158,12 @@ def main(argv: list[str] | None = None) -> None:
     meta, events = load_match(args.data, args.match)
     if args.cmd == "check":
         sys.exit(asyncio.run(_check(meta, events)))
+    if args.cmd == "publish":
+        try:
+            asyncio.run(_publish(meta, events, args.speed, args.start))
+        except KeyboardInterrupt:
+            print("Stopped.", file=sys.stderr)
+        return
 
     default = DEMO_PROFILES if args.cmd == "warm" else ["analyst:en", "fan:en"]
     profiles = [parse_profile(spec, i) for i, spec in enumerate(args.profile or default)]

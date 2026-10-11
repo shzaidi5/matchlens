@@ -17,10 +17,11 @@ Synthetic football events in, explainable and personalized match intelligence ou
 - Done (2026-10-11): Foundry verified live. `python -m matchlens check` returns "agents are live". The resource group is `matchlens-rg` (eastus2), the resource `matchlens-ai-554`, the project `matchlens`, and the deployment `gpt-4.1-mini`. Auth is `az login` plus the "Foundry User" role; "Azure AI User" doesn't exist in this tenant.
 - Done (2026-10-11): deployed to Container Apps from the public repo https://github.com/shzaidi5/matchlens, with commits authored as shzaidi5 (repo-local git config). Every push to main tests, builds and deploys. GitHub OIDC uses the Entra app `matchlens-github-deploy`, which has Contributor on the RG and AcrPush. Its federated subject uses the ID form `repo:shzaidi5@164407895/matchlens@1414842053:ref:refs/heads/main`. ACR Tasks (`az acr build`, `containerapp up --source`) are blocked on this subscription, so images are built by GitHub Actions (`.github/workflows/deploy.yml`) and pushed to `matchlensacr554`. The app `matchlens` (env `matchlens-env`) runs as user-assigned identity `matchlens-id`, which has AcrPull and Foundry User; `AZURE_CLIENT_ID` is set on the app. URL: https://matchlens.greenmoss-a99bb9ec.eastus2.azurecontainerapps.io.
 - Local env: Python 3.13 venv at `.venv`. The Azure CLI isn't on PATH in old terminals, so run `$env:Path += ";C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin"`.
-- Next: add Event Hubs ingest and record the demo video.
+- Done (2026-10-11): Event Hubs live ingest. Namespace `matchlens-eh-554` (Basic, key auth disabled), hub `match-events`. `python -m matchlens publish` sends; `/api/stream?source=live` follows (`pipeline/eventhub.py`). The user has Data Sender and Data Receiver; `matchlens-id` has Data Receiver. Verified end to end locally against the real hub.
+- Next: record the demo video.
 
 ## Conventions
-- `pytest` must pass with no network: 79 tests, using a scripted Agent Framework client (`tests/fakes.py`).
+- `pytest` must pass with no network: 88 tests, using a scripted Agent Framework client (`tests/fakes.py`).
 - No number may reach the screen unless the pipeline or a tool computed it. Keep `grounding.py` and the fact checker strict.
 - Detector thresholds live in `Thresholds` (moments.py). Re-run `python scripts/eval_detectors.py` after changing them, and update the README figures (currently 23 of 30 detected, 4 false alarms).
 - Keep README claims true: state what has and hasn't been run live.

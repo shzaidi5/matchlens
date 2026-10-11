@@ -2,6 +2,7 @@
 
     GET  /api/match      match metadata, capabilities
     GET  /api/stream     Server-Sent Events: live state + overlay cues per profile
+                         (source=replay paces the recorded match; source=live follows Event Hubs)
     GET  /api/insights   every detected moment (replay markers)
     GET  /api/overlay    one profile's full overlay track as JSON or WebVTT
     POST /api/ask        ask-the-match agent (needs a Foundry or Azure OpenAI model)
@@ -12,6 +13,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +26,7 @@ from .agents.desk import new_stats
 from .i18n import LANGUAGE_NAMES, LANGUAGES
 from .models import Cue, Profile
 from .pipeline.explain import REASON_MEANINGS
+from .pipeline.eventhub import LiveFeed, eventhub_source, settings as eventhub_settings
 from .pipeline.ingest import load_match, replay
 from .pipeline.orchestrator import NarrationJob, Pipeline, arun_match, run_match
 from .pipeline.render import to_webvtt
@@ -35,7 +38,17 @@ MATCH_ID = os.getenv("MATCHLENS_MATCH", "sample")
 WEB_DIR = ROOT / "web"
 UI_EVENT_KEYS = ("id", "t", "type", "team", "player_id", "x", "y", "end_x", "end_y", "outcome")
 
-app = FastAPI(title="MatchLens", version="0.2.0")
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    feed = live_feed()
+    if feed is not None:  # start consuming at boot so the first live viewer has the run so far
+        feed.start()
+    yield
+
+
+app = FastAPI(title="MatchLens", version="0.3.0", lifespan=lifespan)
 
 
 class Match:
@@ -83,6 +96,17 @@ def match() -> Match:
     return _match
 
 
+_live: LiveFeed | None = None
+
+
+def live_feed() -> LiveFeed | None:
+    """The Event Hubs consumer, or None when EVENTHUB_NAMESPACE is unset."""
+    global _live
+    if _live is None and (cfg := eventhub_settings()) is not None:
+        _live = LiveFeed(match().meta["match_id"], eventhub_source(cfg))
+    return _live
+
+
 def parse_profiles(raw: str | None) -> list[Profile]:
     if not raw:
         return [Profile(id="a", mode="analyst"), Profile(id="b", mode="fan")]
@@ -116,6 +140,7 @@ def get_match() -> dict[str, Any]:
         "agent_backend": describe_client() if agents else None,
         "template_languages": sorted(LANGUAGES),
         "languages": LANGUAGE_NAMES if agents else {k: LANGUAGE_NAMES[k] for k in LANGUAGES},
+        "live": {"enabled": True, **feed.status()} if (feed := live_feed()) else {"enabled": False},
     }
 
 
@@ -156,15 +181,30 @@ async def stream(
     profiles: str | None = None,
     speed: float = Query(30.0, ge=0.5, le=240.0),
     start: float = Query(0.0, ge=0.0),
+    source: str = Query("replay", pattern="^(replay|live)$"),
 ) -> StreamingResponse:
     m = match()
     viewer_profiles = parse_profiles(profiles)
+    feed = live_feed() if source == "live" else None
+    if source == "live" and feed is None:
+        raise HTTPException(503, "Live ingest is off. Set EVENTHUB_NAMESPACE (see .env.example).")
 
     async def generate():
         pipe = m.pipeline(viewer_profiles)
         desk = pipe.narrator if isinstance(pipe.narrator, EditorialDesk) else None
-        skipped = pipe.fast_forward(m.events, start)
-        yield _sse("init", {"state": pipe.state.snapshot(), "timeline": pipe.state.timeline, "start": start})
+        if feed is not None:  # join the live run where it is: catch up silently, then follow
+            feed.start()
+            backlog, queue = feed.subscribe()
+            if backlog and backlog[-1]["type"] == "match_end":
+                backlog = []  # that match is over: wait for the next kick-off
+            pipe.fast_forward(backlog, float("inf"))
+            now = backlog[-1]["t"] if backlog else 0.0
+            batches = feed.follow(queue, now, fresh=not backlog)
+        else:
+            skipped = pipe.fast_forward(m.events, start)
+            now = start
+            batches = replay(m.events[skipped:], speed=speed, start=start)
+        yield _sse("init", {"state": pipe.state.snapshot(), "timeline": pipe.state.timeline, "start": now, "source": source})
         sent_points = len(pipe.state.timeline)
         writing: list[tuple[asyncio.Task, NarrationJob]] = []
 
@@ -179,7 +219,7 @@ async def stream(
                 collect(out, _late(pipe.finish(job, narratives), now))
 
         try:
-            async for now, batch in replay(m.events[skipped:], speed=speed, start=start):
+            async for now, batch in batches:
                 cues: dict[str, list[dict[str, Any]]] = {}
                 insights: list[dict[str, Any]] = []
                 for ev in batch:
@@ -208,11 +248,13 @@ async def stream(
             if writing:  # let the desk finish what it started (the full-time recap, usually)
                 await asyncio.wait([t for t, _ in writing], timeout=60)
                 late: dict[str, list[dict[str, Any]]] = {}
-                flush(late, m.duration)
+                flush(late, now)
                 if late:
-                    yield _sse("tick", {"t": round(m.duration, 2), "state": pipe.state.snapshot(), "cues": late})
+                    yield _sse("tick", {"t": round(now, 2), "state": pipe.state.snapshot(), "cues": late})
             yield _sse("end", {"state": pipe.state.snapshot()})
         finally:
+            if feed is not None:
+                feed.unsubscribe(queue)
             for task, _ in writing:
                 task.cancel()
             if m.cache:

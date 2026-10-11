@@ -41,7 +41,13 @@ python -m matchlens run --agents --profile fan:fr:CAL                  # same, w
 python -m matchlens export --profile fan:es:CAL --format vtt > fan.vtt  # overlay track as WebVTT
 python -m matchlens generate --seed 42 --name my_match                 # write a new synthetic match
 python scripts/eval_detectors.py                                       # score detectors against ground truth
-pytest                                                                 # 79 tests, no network needed
+pytest                                                                 # 88 tests, no network needed
+```
+
+To feed the viewer live through Azure Event Hubs instead of the recorded file, set `EVENTHUB_NAMESPACE` in `.env`, run `serve`, pick **Live: Event Hubs** in the viewer, and in a second terminal start the feed:
+
+```bash
+python -m matchlens publish --speed 30   # stands in for the data provider: sends each event as it happens
 ```
 
 ## The pipeline
@@ -54,7 +60,7 @@ pytest                                                                 # 79 test
 
 | Stage | Module | What it does |
 |---|---|---|
-| Ingest | `pipeline/ingest.py` | Validates each event, rejects out-of-order delivery, paces replay at any speed. |
+| Ingest | `pipeline/ingest.py`, `pipeline/eventhub.py` | Validates each event, rejects out-of-order delivery, paces replay at any speed. Live mode consumes Azure Event Hubs instead: one consumer per server fans out to every viewer and keeps the current match in memory, so a viewer who joins at minute 60 catches up instantly. |
 | Interpret | `pipeline/interpret.py` | Running stats per team and player; any rolling window is the difference of two 30-second snapshots. Pass difficulty, press rate, PPDA, threat share (momentum), chaos index. |
 | Detect | `pipeline/moments.py` | Eleven detectors emit `Insight` objects: the moment, an importance score, the numeric facts and reason codes that say why it matters. |
 | Personalize | `pipeline/personalize.py` | Re-scores each insight per viewer (audience, favourite club and player, chosen metric) and paces what goes to air. Records why each item was shown. |
@@ -189,7 +195,7 @@ On the sample match the analyst profile gets 28 lower-third overlays and a Spani
 | Microsoft Agent Framework (agents, tools, workflow graph) | Built and tested: the 19 tests in `tests/test_agents.py` drive the real framework with a scripted chat client. |
 | Microsoft Foundry model through `FoundryChatClient`, Microsoft Entra ID auth | Run live (`agents/client.py`): `python -m matchlens check` against a Foundry project with a `gpt-4.1-mini` deployment. The analyst made 3 tool calls, both pieces passed the fact checker with no revisions, and there was no template fallback. Your account needs the **Foundry User** role on the resource. An Azure OpenAI resource also works. |
 | Azure Container Apps for the API and viewer | Deployed: https://matchlens.greenmoss-a99bb9ec.eastus2.azurecontainerapps.io. GitHub Actions (`.github/workflows/deploy.yml`) runs the tests, builds the image, pushes it to Azure Container Registry, deploys it and smoke-tests `/api/health`. CI signs in to Azure with OIDC, so no secrets are stored. The app reaches Foundry as a user-assigned managed identity, so it holds no keys either. `POST /api/ask` has been answered live from the cloud: grounded, with 4 tool calls. |
-| Azure Event Hubs for live ingest | Not built. `ingest.replay` is the seam: it yields the same batches an Event Hubs consumer would. |
+| Azure Event Hubs for live ingest | Built and run live, locally and wired in the cloud app. `publish` sends the match keyed by match id, so it stays ordered on one partition, and tags each message with a run id. The server's consumer reads from the start of retention, so a restarted or scaled-from-zero replica rebuilds the current match. Duplicates and out-of-order redeliveries are rejected. Auth is Entra-only: key auth is disabled on the namespace, the publisher has Data Sender, and the app's managed identity has Data Receiver. In a live test, a viewer waited for kick-off, then followed a 240x run through the hub to the final score (126 ticks, 102 overlay cues). |
 
 ## Coverage of the brief
 

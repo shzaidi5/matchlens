@@ -177,6 +177,9 @@
           <option value="30" selected>30x</option><option value="60">60x</option>
         </select>
       </label>
+      <select id="source" aria-label="Feed source" hidden>
+        <option value="replay">Replay</option><option value="live">Live: Event Hubs</option>
+      </select>
       <button class="btn" id="restart">Restart</button>
     </div>
   </div>
@@ -287,6 +290,12 @@ async function init() {
   $("#play").onclick = () => (S.playing ? pause() : play());
   $("#restart").onclick = () => seek(0);
   $("#speed").onchange = () => S.playing && play();
+  if (meta.live && meta.live.enabled) $("#source").hidden = false;
+  $("#source").onchange = () => {
+    const live = $("#source").value === "live";
+    $("#speed").disabled = $("#restart").disabled = live; // the feed sets the pace in live mode
+    seek(0);
+  };
   document.addEventListener("keydown", (e) => {
     if (e.code === "Space" && !/INPUT|SELECT|BUTTON|TEXTAREA/.test(e.target.tagName)) { e.preventDefault(); S.playing ? pause() : play(); }
   });
@@ -348,7 +357,7 @@ function closeStream() { if (S.es) { S.es.close(); S.es = null; } }
 function play() {
   closeStream();
   if (S.ended) { S.t = 0; S.ended = false; resetOverlays(); }
-  const q = new URLSearchParams({ speed: $("#speed").value, start: S.t.toFixed(2), profiles: JSON.stringify(profiles()) });
+  const q = new URLSearchParams({ speed: $("#speed").value, start: S.t.toFixed(2), profiles: JSON.stringify(profiles()), source: $("#source").value });
   const es = (S.es = new EventSource("/api/stream?" + q));
   es.addEventListener("init", (e) => { const d = JSON.parse(e.data); S.timeline = d.timeline; applyState(d.state); drawTimeline(); });
   es.addEventListener("tick", (e) => onTick(JSON.parse(e.data)));
@@ -359,6 +368,7 @@ function play() {
 function pause() { closeStream(); S.playing = false; $("#play").textContent = "Play"; }
 function restream() { S.viewers.forEach((v) => (v.queue = [])); if (S.playing) play(); }
 function seek(t) {
+  if ($("#source").value === "live" && t > 0) { $("#source").value = "replay"; $("#speed").disabled = $("#restart").disabled = false; }
   S.t = Math.max(0, t); S.ended = false; S.trail = []; S.lastPass = null; S.carrier = null;
   resetOverlays(); play();
 }
