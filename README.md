@@ -188,7 +188,7 @@ On the sample match the analyst profile gets 28 lower-third overlays and a Spani
 |---|---|
 | Microsoft Agent Framework (agents, tools, workflow graph) | Built and tested: the 19 tests in `tests/test_agents.py` drive the real framework with a scripted chat client. |
 | Microsoft Foundry model through `FoundryChatClient`, Microsoft Entra ID auth | Run live (`agents/client.py`): `python -m matchlens check` against a Foundry project with a `gpt-4.1-mini` deployment. The analyst made 3 tool calls, both pieces passed the fact checker with no revisions, and there was no template fallback. Your account needs the **Foundry User** role on the resource. An Azure OpenAI resource also works. |
-| Azure Container Apps for the API and viewer | `Dockerfile` included; **not yet built or deployed**. `az containerapp up --name matchlens --resource-group <rg> --source . --ingress external --target-port 8000` |
+| Azure Container Apps for the API and viewer | Deployed: https://matchlens.greenmoss-a99bb9ec.eastus2.azurecontainerapps.io. GitHub Actions (`.github/workflows/deploy.yml`) runs the tests, builds the image, pushes it to Azure Container Registry, deploys it and smoke-tests `/api/health`. CI signs in to Azure with OIDC, so no secrets are stored. The app reaches Foundry as a user-assigned managed identity, so it holds no keys either. `POST /api/ask` has been answered live from the cloud: grounded, with 4 tool calls. |
 | Azure Event Hubs for live ingest | Not built. `ingest.replay` is the seam: it yields the same batches an Event Hubs consumer would. |
 
 ## Coverage of the brief
