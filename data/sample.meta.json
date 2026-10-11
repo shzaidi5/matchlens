@@ -1,0 +1,225 @@
+{
+  "match_id": "SYN-0898",
+  "competition": "Synthetic Super League",
+  "venue": "Northbridge Park",
+  "synthetic": true,
+  "notice": "Fully synthetic data. Clubs, players and events are fictional.",
+  "pitch": {
+    "length_m": 105.0,
+    "width_m": 68.0,
+    "orientation": "Home attacks towards x=105 for the whole match."
+  },
+  "teams": [
+    {
+      "id": "NBR",
+      "name": "Northbridge Rovers",
+      "short": "Northbridge",
+      "color": "#E5484D",
+      "formation": "4-3-3",
+      "side": "home",
+      "players": [
+        {
+          "id": "NBR-1",
+          "name": "Tomas Hale",
+          "number": 1,
+          "position": "GK",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-2",
+          "name": "Dario Ferreyra",
+          "number": 2,
+          "position": "RB",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-5",
+          "name": "Callum Otieno",
+          "number": 5,
+          "position": "CB",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-6",
+          "name": "Mikkel Strand",
+          "number": 6,
+          "position": "CB",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-3",
+          "name": "Jun-ho Baek",
+          "number": 3,
+          "position": "LB",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-4",
+          "name": "Idris Mbaye",
+          "number": 4,
+          "position": "DM",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-8",
+          "name": "Leon Harwick",
+          "number": 8,
+          "position": "CM",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-10",
+          "name": "Rafael Quintero",
+          "number": 10,
+          "position": "CM",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-7",
+          "name": "Kofi Adjaye",
+          "number": 7,
+          "position": "RW",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-9",
+          "name": "Viktor Sandahl",
+          "number": 9,
+          "position": "ST",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-11",
+          "name": "Emeka Nwosu",
+          "number": 11,
+          "position": "LW",
+          "team": "NBR"
+        }
+      ],
+      "bench": [
+        {
+          "id": "NBR-14",
+          "name": "Oscar Lindqvist",
+          "number": 14,
+          "position": "CM",
+          "team": "NBR"
+        },
+        {
+          "id": "NBR-19",
+          "name": "Tariq Benali",
+          "number": 19,
+          "position": "ST",
+          "team": "NBR"
+        }
+      ]
+    },
+    {
+      "id": "CAL",
+      "name": "Calderwick United",
+      "short": "Calderwick",
+      "color": "#3E9BD8",
+      "formation": "4-2-3-1",
+      "side": "away",
+      "players": [
+        {
+          "id": "CAL-1",
+          "name": "Marek Dvorsky",
+          "number": 1,
+          "position": "GK",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-22",
+          "name": "Aiden Prowse",
+          "number": 22,
+          "position": "RB",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-4",
+          "name": "Nuno Seabra",
+          "number": 4,
+          "position": "CB",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-15",
+          "name": "Elias Brandt",
+          "number": 15,
+          "position": "CB",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-3",
+          "name": "Kwame Asante-Boyd",
+          "number": 3,
+          "position": "LB",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-6",
+          "name": "Stefan Ilic",
+          "number": 6,
+          "position": "DM",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-8",
+          "name": "Hamza El Idrissi",
+          "number": 8,
+          "position": "DM",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-10",
+          "name": "Luca Moretto",
+          "number": 10,
+          "position": "AM",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-17",
+          "name": "Jaden Whitlock",
+          "number": 17,
+          "position": "RW",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-11",
+          "name": "Mateo Arrieta",
+          "number": 11,
+          "position": "LW",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-9",
+          "name": "Olu Adeyemi-Ross",
+          "number": 9,
+          "position": "ST",
+          "team": "CAL"
+        }
+      ],
+      "bench": [
+        {
+          "id": "CAL-20",
+          "name": "Finn Gallagher-Reyes",
+          "number": 20,
+          "position": "ST",
+          "team": "CAL"
+        },
+        {
+          "id": "CAL-16",
+          "name": "Tomasz Wrona",
+          "number": 16,
+          "position": "CM",
+          "team": "CAL"
+        }
+      ]
+    }
+  ],
+  "generator": {
+    "name": "matchlens.synth",
+    "version": "1.0",
+    "seed": 898
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "match_id": "SYN-0898",
+  "seed": 898,
+  "final_score": {
+    "NBR": 1,
+    "CAL": 2
+  },
+  "tactic_phases": [
+    {
+      "team": "NBR",
+      "from_minute": 0,
+      "label": "patient_control",
+      "press": 0.45,
+      "directness": 0.35,
+      "control": 0.05,
+      "tempo": 0.45
+    },
+    {
+      "team": "NBR",
+      "from_minute": 25,
+      "label": "balanced",
+      "press": 0.4,
+      "directness": 0.4,
+      "control": 0.03,
+      "tempo": 0.5
+    },
+    {
+      "team": "NBR",
+      "from_minute": 60,
+      "label": "tiring_under_pressure",
+      "press": 0.3,
+      "directness": 0.55,
+      "control": -0.03,
+      "tempo": 0.55
+    },
+    {
+      "team": "NBR",
+      "from_minute": 78,
+      "label": "holding_on",
+      "press": 0.33,
+      "directness": 0.6,
+      "control": -0.04,
+      "tempo": 0.6
+    },
+    {
+      "team": "CAL",
+      "from_minute": 0,
+      "label": "low_block",
+      "press": 0.22,
+      "directness": 0.6,
+      "control": -0.03,
+      "tempo": 0.5
+    },
+    {
+      "team": "CAL",
+      "from_minute": 25,
+      "label": "mid_block",
+      "press": 0.42,
+      "directness": 0.5,
+      "control": 0.0,
+      "tempo": 0.5
+    },
+    {
+      "team": "CAL",
+      "from_minute": 45,
+      "label": "mid_block_plus",
+      "press": 0.48,
+      "directness": 0.5,
+      "control": 0.01,
+      "tempo": 0.55
+    },
+    {
+      "team": "CAL",
+      "from_minute": 60,
+      "label": "high_press",
+      "press": 0.88,
+      "directness": 0.65,
+      "control": 0.02,
+      "tempo": 0.75
+    },
+    {
+      "team": "CAL",
+      "from_minute": 78,
+      "label": "sustained_press",
+      "press": 0.72,
+      "directness": 0.6,
+      "control": 0.02,
+      "tempo": 0.7
+    }
+  ],
+  "substitutions": [
+    {
+      "minute": 60,
+      "team": "CAL",
+      "off": 9,
+      "on": 20
+    },
+    {
+      "minute": 70,
+      "team": "NBR",
+      "off": 8,
+      "on": 14
+    }
+  ]
+}

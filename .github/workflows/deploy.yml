@@ -1,0 +1,60 @@
+# Test on every push and PR; build, push and deploy to Azure Container Apps on main.
+# Auth is GitHub OIDC federated with an Entra app: no stored Azure secrets.
+name: test-and-deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  RESOURCE_GROUP: matchlens-rg
+  CONTAINER_APP: matchlens
+  ACR_NAME: matchlensacr554
+  IMAGE: matchlensacr554.azurecr.io/matchlens
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - run: pytest -q
+
+  deploy:
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Build and push image
+        run: |
+          az acr login --name "$ACR_NAME"
+          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" .
+          docker push --all-tags "$IMAGE"
+      - name: Deploy to Container Apps
+        run: |
+          az containerapp update -n "$CONTAINER_APP" -g "$RESOURCE_GROUP" --image "$IMAGE:${{ github.sha }}" -o none
+          az containerapp ingress update -n "$CONTAINER_APP" -g "$RESOURCE_GROUP" --target-port 8000 -o none
+      - name: Smoke test
+        run: |
+          fqdn=$(az containerapp show -n "$CONTAINER_APP" -g "$RESOURCE_GROUP" --query properties.configuration.ingress.fqdn -o tsv)
+          for i in $(seq 1 20); do
+            if curl -fsS "https://$fqdn/api/health"; then echo; echo "Live at https://$fqdn"; exit 0; fi
+            sleep 10
+          done
+          echo "Health check failed"; exit 1

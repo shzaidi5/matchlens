@@ -1,0 +1,9 @@
+# Runtime (versions the test suite was run against)
+fastapi==0.142.2
+uvicorn==0.53.0
+pydantic==2.13.5
+# Microsoft Agent Framework: core (agents, workflows), Foundry and Azure OpenAI chat clients
+agent-framework-core==1.20.0
+agent-framework-foundry==1.14.0
+agent-framework-openai==1.15.0
+azure-identity==1.26.0

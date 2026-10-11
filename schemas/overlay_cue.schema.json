@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/matchlens/overlay_cue.schema.json",
+  "title": "MatchLens overlay cue",
+  "description": "One timed, renderer-agnostic overlay instruction. Times are match seconds on the same clock as the event feed.",
+  "type": "object",
+  "required": ["id", "profile_id", "slot", "t_in", "t_out", "clock", "priority", "lang", "audience", "kind", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "profile_id": { "type": "string", "description": "Viewer profile this cue was produced for." },
+    "insight_id": { "type": ["string", "null"], "description": "Detected moment this cue explains; null for follow-player tags." },
+    "slot": { "enum": ["lower_third", "stat_card", "player_tag", "recap"] },
+    "t_in": { "type": "number", "minimum": 0 },
+    "t_out": { "type": "number", "minimum": 0 },
+    "clock": { "type": "string", "pattern": "^[0-9]{2,3}:[0-9]{2}$" },
+    "priority": { "type": "number", "minimum": 0, "maximum": 1, "description": "Relevance to this viewer; a renderer may drop low values under load." },
+    "lang": { "type": "string", "description": "BCP 47 language of the text in payload." },
+    "audience": { "enum": ["analyst", "fan"] },
+    "kind": {
+      "enum": ["goal", "big_chance", "shot_speed", "line_breaking_pass", "pass_milestone", "speed_alert",
+               "distance_alert", "press_shift", "momentum_swing", "rhythm_shift", "recap", "player_focus"]
+    },
+    "payload": {
+      "type": "object",
+      "required": ["minute", "why_shown", "source"],
+      "properties": {
+        "minute": { "type": "string" },
+        "headline": { "type": "string" },
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "phase": { "enum": ["half_time", "full_time"] },
+        "source": { "enum": ["template", "agents"], "description": "agents = written by the agent desk and passed the fact checker." },
+        "trace": {
+          "type": "object",
+          "description": "How the agent desk produced this copy, or why its draft was rejected.",
+          "properties": {
+            "brief": { "type": "string" },
+            "tools": { "type": "array" },
+            "revisions": { "type": "integer" },
+            "rejected": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "why_shown": { "type": "array", "items": { "type": "string" }, "description": "Personalization reasons, e.g. favorite_team." },
+        "team": { "$ref": "#/$defs/team" },
+        "home": { "$ref": "#/$defs/team" },
+        "away": { "$ref": "#/$defs/team" },
+        "player": {
+          "type": ["object", "null"],
+          "required": ["id", "name", "number", "team"],
+          "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "number": { "type": "integer" }, "team": { "type": "string" } }
+        },
+        "anchor": {
+          "type": ["object", "null"],
+          "required": ["x", "y"],
+          "description": "Pitch position in metres (0-105, 0-68) for anchored graphics.",
+          "properties": { "x": { "type": "number", "minimum": 0, "maximum": 105 }, "y": { "type": "number", "minimum": 0, "maximum": 68 } }
+        },
+        "stats": {
+          "type": "array",
+          "items": { "type": "object", "required": ["label", "value"], "properties": { "label": { "type": "string" }, "value": { "type": "string" } } }
+        },
+        "table": {
+          "type": "array",
+          "items": { "type": "object", "required": ["label", "home", "away"], "properties": { "label": { "type": "string" }, "home": { "type": "string" }, "away": { "type": "string" } } }
+        },
+        "scorers": { "type": "array" }
+      }
+    }
+  },
+  "$defs": {
+    "team": {
+      "type": ["object", "null"],
+      "required": ["id", "name", "color"],
+      "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" } }
+    }
+  }
+}
