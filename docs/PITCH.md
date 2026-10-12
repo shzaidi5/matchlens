@@ -10,6 +10,18 @@ Built with Microsoft Agent Framework on a Microsoft Foundry model (gpt-4.1-mini)
 
 ## Demo video script (target 1:50, hard limit 2:00)
 
+### Generated version
+
+`build/video/matchlens-demo.mp4` (1:48, 1080p) is recorded automatically from the deployed app, with an Azure AI Speech voiceover and `.srt` captions:
+
+```bash
+python scripts/video/voiceover.py   # voice lines (Azure AI Speech, Entra auth; needs "Cognitive Services Speech User")
+python scripts/video/record.py      # Playwright drives the live app through the shot list; publishes the match to Event Hubs
+python scripts/video/assemble.py    # mp4 + srt
+```
+
+To record it by hand instead, follow the steps below.
+
 ### Before recording
 
 1. Use the deployed app: https://matchlens.greenmoss-a99bb9ec.eastus2.azurecontainerapps.io. Use a 1920x1080 browser window at 100% zoom, and close other tabs.
@@ -28,7 +40,7 @@ Built with Microsoft Agent Framework on a Microsoft Foundry model (gpt-4.1-mini)
 | 0:38 | Switch the picker to **Replay**, then select the **63' tactical shift** marker. | "Now the moment that decides the match. Sixty-one minutes: Calderwick bring on a striker. Two minutes later, their press jumps from 33 to 70 percent." |
 | 0:50 | Point the cursor at "Why this is on screen" on viewer A. | "Every overlay shows its evidence. The analyst agent called match tools, briefed two writer agents, and a fact checker rejects any number the pipeline didn't compute." |
 | 1:05 | Let it run to the **67' equaliser**. | "And it pays off. The substitute scores, and MatchLens explains why: the press won the ball high." |
-| 1:15 | On viewer B, set favourite player to **10 Rafael Quintero** and tick player focus. | "Every viewer can personalise. Follow one player, and a tag tracks him with his own live stats." |
+| 1:15 | On viewer B, set favourite player to **20 Finn Gallagher-Reyes** and tick "Follow this player". | "Every viewer can personalise. Follow the substitute, and a tag tracks him with his own live stats." |
 | 1:27 | Type into **Ask about the match**: "Why did Calderwick come back?" Wait for the answer. | "Fans can also just ask. The answer comes from the same tools, and every number is checked." |
 | 1:40 | Select the full-time marker; the recap and the momentum river are visible. | "One feed, a broadcast for every fan: explainable, personal and live on Azure. That's MatchLens." |
 | 1:50 | End card: the repo URL `github.com/shzaidi5/matchlens`. | (silence) |
