@@ -49,6 +49,7 @@ class Director:
         self.t0 = time.monotonic()
         self.t0_wall = time.time()
         self.cues: list[dict] = []
+        self.cuts: list[list[float]] = []  # dead air while waiting on the live feed; assemble.py removes it
 
     def now(self) -> float:
         return time.monotonic() - self.t0
@@ -171,9 +172,11 @@ async def main() -> None:
         await d.say("live")
         await d.card(None)
 
-        # the 20' goal arrives live
+        # the 20' goal arrives live; however long the feed took, the edit cuts straight to it
+        waiting = d.now()
         await page.wait_for_function("S.state && (S.state.score.NBR + S.state.score.CAL) >= 1", timeout=90_000)
-        await asyncio.sleep(2.0)
+        d.cuts.append([round(waiting, 2), round(d.now() - 0.3, 2)])
+        await asyncio.sleep(1.2)
         await d.say("goal")
 
         # replay: the 63' press shift
@@ -224,7 +227,7 @@ async def main() -> None:
         await browser.close()
         feed.terminate()
 
-    plan = {"t0": d.t0_wall, "length": round(end, 2), "cues": d.cues, "frames": cast.frames}
+    plan = {"t0": d.t0_wall, "length": round(end, 2), "cues": d.cues, "cuts": d.cuts, "frames": cast.frames}
     (OUT / "plan.json").write_text(json.dumps(plan, indent=2))
     span = cast.frames[-1][0] - cast.frames[0][0]
     print(f"recorded {end:.1f}s: {len(cast.frames)} frames ({len(cast.frames) / span:.1f}/s on average)")

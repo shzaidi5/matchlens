@@ -22,18 +22,31 @@ def stamp(s: float) -> str:
     return f"{ms // 3600000:02d}:{ms // 60000 % 60:02d}:{ms // 1000 % 60:02d},{ms % 1000:03d}"
 
 
+def kept(plan: dict) -> list[tuple[float, float]]:
+    """The parts of the recording that stay: everything except the cuts (times relative to t0)."""
+    spans, start = [], 0.0
+    for a, b in sorted(plan.get("cuts", [])):
+        spans.append((start, a))
+        start = b
+    spans.append((start, plan["length"]))
+    return [(a, b) for a, b in spans if b > a]
+
+
+def shift(plan: dict, t: float) -> float:
+    """Where recording time `t` lands in the edited video."""
+    return t - sum(min(b, t) - a for a, b in plan.get("cuts", []) if a < t)
+
+
 def concat_list(plan: dict) -> Path:
-    """ffmpeg concat script: each frame held until the next repaint, clipped to [t0, t0 + length]."""
-    t0, t1 = plan["t0"], plan["t0"] + plan["length"]
-    frames = sorted(plan["frames"])
-    first = max([i for i, (ts, _) in enumerate(frames) if ts <= t0] or [0])
+    """ffmpeg concat script: each frame held until the next repaint, minus the cuts."""
+    spans = kept(plan)
+    frames = sorted([ts - plan["t0"], name] for ts, name in plan["frames"])
     lines = []
-    for i in range(first, len(frames)):
-        ts, name = frames[i]
-        if ts >= t1:
-            break
-        nxt = frames[i + 1][0] if i + 1 < len(frames) else t1
-        lines += [f"file 'frames/{name}'", f"duration {min(nxt, t1) - max(ts, t0):.4f}"]
+    for i, (ts, name) in enumerate(frames):
+        nxt = frames[i + 1][0] if i + 1 < len(frames) else plan["length"]
+        shown = sum(max(0.0, min(nxt, b) - max(ts, a)) for a, b in spans)
+        if shown > 0.0005:
+            lines += [f"file 'frames/{name}'", f"duration {shown:.4f}"]
     lines.append(lines[-2])  # the concat demuxer ignores the last entry's duration
     path = OUT / "frames.txt"
     path.write_text("\n".join(lines) + "\n")
@@ -43,7 +56,8 @@ def concat_list(plan: dict) -> Path:
 def main() -> None:
     plan = json.loads((OUT / "plan.json").read_text())
     durations = json.loads((OUT / "durations.json").read_text())
-    cues = plan["cues"]
+    cues = [{**c, "at": shift(plan, c["at"])} for c in plan["cues"]]
+    length = plan["length"] - sum(b - a for a, b in plan.get("cuts", []))
 
     inputs = ["-f", "concat", "-safe", "0", "-i", str(concat_list(plan))]
     mix = []
@@ -54,13 +68,13 @@ def main() -> None:
     labels = "".join(f"[a{i}]" for i in range(1, len(cues) + 1))
     graph = (
         "[0:v]fps=30,scale=3840:2160:flags=lanczos:out_color_matrix=bt709:out_range=tv,format=yuv420p[vout];"
-        + ";".join(mix) + f";{labels}amix=inputs={len(cues)}:normalize=0,apad=whole_dur={plan['length']}[aout]"
+        + ";".join(mix) + f";{labels}amix=inputs={len(cues)}:normalize=0,apad=whole_dur={length}[aout]"
     )
 
     out = OUT / "matchlens-demo.mp4"
     subprocess.run(
         [imageio_ffmpeg.get_ffmpeg_exe(), "-y", "-loglevel", "error", "-stats", *inputs,
-         "-filter_complex", graph, "-map", "[vout]", "-map", "[aout]", "-t", str(plan["length"]),
+         "-filter_complex", graph, "-map", "[vout]", "-map", "[aout]", "-t", f"{length:.3f}",
          "-c:v", "libx264", "-preset", "medium", "-crf", "16", "-profile:v", "high", "-level", "5.1",
          "-color_range", "tv", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709",
          "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(out)],
@@ -70,7 +84,7 @@ def main() -> None:
     srt = [f"{n}\n{stamp(c['at'])} --> {stamp(c['at'] + durations[c['line']])}\n{LINES[c['line']]}\n"
            for n, c in enumerate(cues, start=1)]
     (OUT / "matchlens-demo.srt").write_text("\n".join(srt), encoding="utf-8")
-    print(f"{out} ({plan['length']:.1f}s, {out.stat().st_size / 1e6:.1f} MB)")
+    print(f"{out} ({length:.1f}s, {out.stat().st_size / 1e6:.1f} MB)")
 
 
 if __name__ == "__main__":
