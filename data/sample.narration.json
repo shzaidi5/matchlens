@@ -1645,5 +1645,95 @@
    ],
    "revisions": 0
   }
+ },
+ "line_breaking_pass-035|fan|es|CAL": {
+  "headline": "¡Gran pase de Hamza El Idrissi bajo presión!",
+  "body": "A los 65 minutos, Hamza El Idrissi encontró a Finn Gallagher-Reyes con un pase largo de 34 metros justo dentro del área, mostrando el control y la fuerza de Calderwick en el partido.",
+  "trace": {
+   "brief": "Hamza El Idrissi's line-breaking pass at 65 minutes is a key moment, as it stands out as his hardest pass of the match with a difficulty rating of 91 and covers a long distance of 34 meters, reaching the box under pressure. Calderwick has had a dominant last 10 minutes with 55% possession, 78% pass accuracy, and five box entries compared to Northbridge's zero box entries, highlighting Calderwick's offensive momentum. This pass exemplifies Calderwick's control and threat dominance in the game right now.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Hamza El Idrissi"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 10
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 10
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "line_breaking_pass-038|fan|es|CAL": {
+  "headline": "¡Pase espectacular de Stefan Ilic para Calderwick!",
+  "body": "Con un rival encima, Ilic lanzó un pase largo y preciso a Finn Gallagher-Reyes dentro del área. Este pase muestra cómo Calderwick sigue dominando y presionando para marcar.",
+  "trace": {
+   "brief": "Stefan Ilic completes a very difficult line-breaking pass (difficulty 83) covering 27 meters at 70 km/h, with a defender closing him down, splitting the Northbridge defense. Ilic's passing accuracy is 76% with a high average pass difficulty (42 of 55 passes, one being this hardest at 83). Calderwick has been dominating lately with 58% possession, 10 box entries, and 4 shots in the last 15 minutes, indicating this pass builds on sustained momentum and attacking pressure. Recipient Finn Gallagher-Reyes scored the equalizer recently (minute 67) and came on as a sub at 61', showing fresh legs for Calderwick's high threat play inside the box.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Stefan Ilic"
+     }
+    },
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": null,
+      "limit": 5
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 15
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "line_breaking_pass-054|fan|es|CAL": {
+  "headline": "Pase brillante de Jaden Whitlock que abre la defensa",
+  "body": "En el último segundo, Whitlock superó la presión con un pase largo y preciso que dejó a Finn Gallagher-Reyes dentro del área. Calderwick sigue dominando y creando peligro justo cuando más importa.",
+  "trace": {
+   "brief": "Jaden Whitlock made a highly difficult (85/100) line-breaking pass of 31 meters into the box under pressure, at 90+3 minutes. Whitlock's pass accuracy this match is 78%, with an average pass difficulty of 48, highlighting the exceptional quality of this long-range 70 km/h ball. Calderwick has dominated the last 10 minutes with 57% possession, 83% pass accuracy, 7 box entries, and 1 goal scored, while Northbridge has managed no shots or goals, showing Calderwick's momentum and threat creation in the dying moments.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Jaden Whitlock"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 10
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 10
+     }
+    }
+   ],
+   "revisions": 0
+  }
  }
 }
