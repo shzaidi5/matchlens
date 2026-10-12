@@ -21,12 +21,22 @@ from .tools import MatchTools
 INSTRUCTIONS = """You are a football match analyst answering a viewer during a live match.
 Call tools to get facts. Answer only from tool results: never state a number, \
 name or event a tool did not return. If the tools cannot answer, say so.
+Reply with the answer only: do not describe your tool calls or your plan.
 Keep the answer to at most four sentences."""
 
 AUDIENCE = {
     "analyst": "tactically literate; use the numbers and proper terms",
     "fan": "a casual fan; plain language, no jargon, at most two numbers",
 }
+
+
+def final_text(response: Any) -> str:
+    """The agent's last message. `response.text` joins every message, including
+    anything the model said before a tool call ("Let me check the stats...")."""
+    for message in reversed(getattr(response, "messages", None) or []):
+        if getattr(message, "role", None) == "assistant" and (message.text or "").strip():
+            return message.text.strip()
+    return (response.text or "").strip()
 
 
 class AskAnalyst:
@@ -39,7 +49,7 @@ class AskAnalyst:
         language = LANGUAGE_NAMES.get(profile.lang, profile.lang)
         prompt = f"Answer in {language}. Audience: {AUDIENCE[profile.mode]}.\n\nQuestion: {question}"
         response = await self.agent.run(prompt, tools=tools.as_tools())
-        answer = (response.text or "").strip()
+        answer = final_text(response)
         bad = ungrounded_numbers(answer, tools.evidence | numbers_in(question))
         revisions = 0
         if bad:
@@ -51,7 +61,7 @@ class AskAnalyst:
                 "Rewrite the answer using only numbers the tools return."
             )
             response = await self.agent.run(retry, tools=tools.as_tools())
-            answer = (response.text or "").strip()
+            answer = final_text(response)
             bad = ungrounded_numbers(answer, tools.evidence | numbers_in(question))
         return {
             "answer": answer,

@@ -270,3 +270,17 @@ def test_stream_airs_agent_copy_without_blocking_the_clock(tmp_path, monkeypatch
     answer = client.post("/api/ask", json={"question": "Who is on top?", "profile": {"mode": "fan"}})
     assert answer.status_code == 200 and "answer" in answer.json()
     monkeypatch.setattr(server, "_match", None)
+
+
+def test_ask_answer_is_the_final_message_only():
+    from types import SimpleNamespace as NS
+
+    from matchlens.agents.analyst import final_text
+
+    response = NS(
+        text="Let me check the stats.Calderwick pressed higher.",
+        messages=[NS(role="assistant", text="Let me check the stats."), NS(role="tool", text=""),
+                  NS(role="assistant", text="Calderwick pressed higher.")],
+    )
+    assert final_text(response) == "Calderwick pressed higher."
+    assert final_text(NS(text=" plain ", messages=[])) == "plain"
