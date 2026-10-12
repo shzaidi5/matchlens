@@ -11,7 +11,9 @@ The live segment publishes the match to Event Hubs, so `az login` and the
 from __future__ import annotations
 
 import asyncio
+import base64
 import json
+import shutil
 import os
 import subprocess
 import sys
@@ -25,6 +27,8 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "build" / "video"
 URL = os.getenv("MATCHLENS_URL", "https://matchlens.greenmoss-a99bb9ec.eastus2.azurecontainerapps.io")
 SIZE = {"width": 1920, "height": 1080}
+SCALE = 2  # render at 2x and capture 3840x2160: YouTube gives 4K uploads far more bitrate, so small text stays sharp
+FRAMES = OUT / "frames"
 GAP = 0.6  # silence between voice lines
 
 CARD_CSS = """
@@ -43,6 +47,7 @@ class Director:
     def __init__(self, page, durations: dict[str, float]) -> None:
         self.page, self.durations = page, durations
         self.t0 = time.monotonic()
+        self.t0_wall = time.time()
         self.cues: list[dict] = []
 
     def now(self) -> float:
@@ -79,6 +84,31 @@ class Director:
         await self.js("([t, speed]) => { document.querySelector('#speed').value = speed; seek(t); }", [t, speed])
 
 
+class Screencast:
+    """Lossless-quality frames straight from Chrome (Playwright's built-in recorder is ~1 Mbps VP8).
+
+    Chrome sends a frame whenever the page repaints, stamped with wall-clock time;
+    assemble.py turns them into constant-frame-rate video.
+    """
+
+    def __init__(self, cdp) -> None:
+        self.cdp, self.frames = cdp, []
+        cdp.on("Page.screencastFrame", lambda p: asyncio.ensure_future(self._frame(p)))
+
+    async def _frame(self, p: dict) -> None:
+        name = f"{len(self.frames):05d}.jpg"
+        (FRAMES / name).write_bytes(base64.b64decode(p["data"]))
+        self.frames.append([p["metadata"]["timestamp"], name])
+        await self.cdp.send("Page.screencastFrameAck", {"sessionId": p["sessionId"]})
+
+    async def start(self) -> None:
+        w, h = SIZE["width"] * SCALE, SIZE["height"] * SCALE
+        await self.cdp.send("Page.startScreencast", {"format": "jpeg", "quality": 95, "maxWidth": w, "maxHeight": h})
+
+    async def stop(self) -> None:
+        await self.cdp.send("Page.stopScreencast")
+
+
 def marker(markers: list[dict], kind: str, minute: str) -> float:
     return next(m["t"] for m in markers if m["kind"] == kind and m["minute"] == minute)
 
@@ -111,18 +141,19 @@ async def main() -> None:
     markers = json.load(urllib.request.urlopen(f"{URL}/api/insights", timeout=120))
     shift_t, equaliser_t = marker(markers, "press_shift", "63'"), marker(markers, "goal", "67'")
     recap_t = marker(markers, "recap", "90+5'")
-    for old in OUT.glob("*.webm"):
-        old.unlink()
+    shutil.rmtree(FRAMES, ignore_errors=True)
+    FRAMES.mkdir(parents=True)
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch()
-        ctx = await browser.new_context(viewport=SIZE, record_video_dir=str(OUT), record_video_size=SIZE)
+        ctx = await browser.new_context(viewport=SIZE, device_scale_factor=SCALE)
         page = await ctx.new_page()
-        opened = time.monotonic()
+        cast = Screencast(await ctx.new_cdp_session(page))
         await page.goto(URL, wait_until="networkidle")
         await page.add_style_tag(content=CARD_CSS)
         await page.wait_for_selector("#source:not([hidden])", timeout=60_000)
         await asyncio.sleep(1.5)  # let the pitches draw
+        await cast.start()
         d = Director(page, durations)
 
         # 0:00 title, then the two viewers waiting for a live kick-off
@@ -186,15 +217,17 @@ async def main() -> None:
                              f"<p>{URL.removeprefix('https://')}</p><p>Synthetic data. All clubs and players are fictional.</p>")
         await asyncio.sleep(4)
         end = d.now()
+        await cast.stop()
+        await asyncio.sleep(0.5)
 
         await ctx.close()
         await browser.close()
         feed.terminate()
 
-    video = next(OUT.glob("*.webm"))
-    plan = {"video": str(video), "offset": round(d.t0 - opened, 2), "length": round(end, 2), "cues": d.cues}
+    plan = {"t0": d.t0_wall, "length": round(end, 2), "cues": d.cues, "frames": cast.frames}
     (OUT / "plan.json").write_text(json.dumps(plan, indent=2))
-    print(f"recorded {end:.1f}s -> {video.name}")
+    span = cast.frames[-1][0] - cast.frames[0][0]
+    print(f"recorded {end:.1f}s: {len(cast.frames)} frames ({len(cast.frames) / span:.1f}/s on average)")
 
 
 if __name__ == "__main__":
