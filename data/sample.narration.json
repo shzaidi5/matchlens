@@ -845,5 +845,805 @@
    ],
    "revisions": 0
   }
+ },
+ "shot_speed-005|fan|es|CAL": {
+  "headline": "¡Kofi Adjaye dispara con fuerza a 118 km/h!",
+  "body": "Aunque el disparo salió desviado, muestra que está muy activo y buscando sorprender desde lejos.",
+  "trace": {
+   "brief": "This moment matters because Kofi Adjaye of Northbridge unleashed a shot at 118 km/h from 27 meters, the fastest so far in the match at 12 minutes. Although off target and with a low xG of 0.02, this shot reflects Adjaye's active involvement—he has taken the only shot for his team up to this point, with 8 touches and 60% pass accuracy. The speed of the shot highlights his threat potential early in the game.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Kofi Adjaye"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "speed_alert-006|fan|es|CAL": {
+  "headline": "¡Mateo Arrieta acelera a 34.5 km/h!",
+  "body": "Su sprint más rápido del partido muestra por qué Calderwick amenaza por la banda izquierda.",
+  "trace": {
+   "brief": "Mateo Arrieta's sprint at 34.5 km/h, covering 30 meters, sets the fastest speed of the match so far at 14 minutes. His top speed is a key factor in Calderwick's dynamics, complementing his 7 touches and 80% pass accuracy. This burst of pace signals a potential threat with his presence and pressing ability on the left wing.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Mateo Arrieta"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "goal-007|fan|es|CAL": {
+  "headline": "Gol de Northbridge. Viktor Sandahl abre el marcador.",
+  "body": "Northbridge se adelantó tras una jugada que dominaron en los últimos diez minutos. Calderwick debe reaccionar rápido para no quedarse atrás.",
+  "trace": {
+   "brief": "This opener by Viktor Sandahl at 20' is the culmination of Northbridge's dominant play in the preceding 10 minutes, with the team holding 85% threat share and completing 89% of their passes. Sandahl himself was very involved with 5 shots and 29 touches so far, scoring a composed finish from 7 meters and 80 km/h left foot speed after a 5-pass 26-second move. Northbridge's xG of 0.61 through 6 shots confirms their control and quality in attack before this goal.",
+   "tools": [
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 10
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Viktor Sandahl"
+     }
+    },
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": "goal",
+      "limit": 3
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "goal-007|fan|en|NBR": {
+  "headline": "YES! Viktor Sandahl puts Northbridge ahead!",
+  "body": "After keeping the pressure on, Viktor Sandahl nails a smart finish to give Northbridge the lead. They've been the stronger side this last 10 minutes, and it’s finally paying off.",
+  "trace": {
+   "brief": "This opener by Viktor Sandahl at 20' is the culmination of Northbridge's dominant play in the preceding 10 minutes, with the team holding 85% threat share and completing 89% of their passes. Sandahl himself was very involved with 5 shots and 29 touches so far, scoring a composed finish from 7 meters and 80 km/h left foot speed after a 5-pass 26-second move. Northbridge's xG of 0.61 through 6 shots confirms their control and quality in attack before this goal.",
+   "tools": [
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 10
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Viktor Sandahl"
+     }
+    },
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": "goal",
+      "limit": 3
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "rhythm_shift-010|fan|es|CAL": {
+  "headline": "¡Calderwick aprieta y sube la intensidad!",
+  "body": "Desde el minuto 22, Calderwick ha aumentado su presión y ahora el juego está mucho más loco, con más pérdidas y oportunidades rápidas. Esto nos da chance de recuperar y atacar más fuerte.",
+  "trace": {
+   "brief": "Calderwick's pressing rate has risen in the last 10 minutes, increasing chaos from 19 to 64 with turnovers per minute up from 1.5 to 2.5. Although Calderwick's pass accuracy dropped to 67% with lower possession (41%) and fewer entries into the box, the team is applying more pressure (33% press rate). Northbridge holds better possession (59%) and pass accuracy (85%) with more shots and final third entries but faces increased pressing pressure, showing a tense, chaotic battle shaping the rhythm of the match.",
+   "tools": [
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 10
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 10
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "pass_milestone-011|fan|en|NBR": {
+  "headline": "Rafael Quintero is having a masterclass with the ball",
+  "body": "At 32 minutes, he’s completed 30 out of 34 passes, keeping Northbridge in control and driving the play forward.",
+  "trace": {
+   "brief": "Rafael Quintero's passing performance is crucial at 32 minutes, completing 30 of 34 passes with an 88% accuracy, reflecting his pivotal role in Northbridge's build-up play. His average pass difficulty of 48 and a hardest pass measured at 84 highlight his capacity to execute complex passes. Quintero's 37 touches and defensive contributions with 2 interceptions and 11 pressures underline his all-around influence on the game. These numbers confirm his importance in maintaining possession and dictating Northbridge's tempo against Calderwick.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Rafael Quintero"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "line_breaking_pass-017|fan|en|NBR": {
+  "headline": "Rafael Quintero’s superb pass breaks Calderwick’s defence",
+  "body": "Under serious pressure, Quintero sent a brilliant long ball into the box for Sandahl. This tough pass keeps Northbridge pushing hard as the half ends.",
+  "trace": {
+   "brief": "Rafael Quintero delivered a highly difficult line-breaking pass (difficulty 84) under pressure, covering 29 meters with 23 forward meters at 57 km/h, setting up Viktor Sandahl inside the box at 43 minutes. This pass matches Quintero's hardest in the match and stands out as a key offensive threat. Northbridge has been offensive recently with 6 box entries and 3 shots in the last 10 minutes, controlling 67% of the threat share, highlighting this moment's significance in maintaining their attacking momentum.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Rafael Quintero"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 10
+     }
+    },
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": null,
+      "limit": 5
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "recap-020|fan|es|CAL": {
+  "headline": "Descanso: Northbridge 1-0 Calderwick",
+  "body": "Calderwick debe apretar para remontar. Northbridge domina el juego y Viktor Sandahl marcó el único gol.",
+  "trace": {
+   "brief": "Northbridge leads 1-0 at half-time with a superior overall performance: 53% possession, 14 shots (5 on target), and an xG of 1.37 compared to Calderwick's 0.06 xG from just 1 shot. Viktor Sandahl, the match standout, scored the only goal at 20', has taken 11 shots with an xG of 1.31, and shows high involvement with 57 touches and 27 pressures. Northbridge's stronger pressing (ppda 6.83 vs Calderwick 9.5) and higher pass accuracy (82% vs 76%) underline their control. Calderwick experienced a chaotic phase around the 32nd minute which shifted momentum but has yet to convert it into chances.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Viktor Sandahl"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 45
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 45
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "recap-020|fan|en|NBR": {
+  "headline": "Half-time: Northbridge 1-0 Calderwick",
+  "body": "Northbridge lead thanks to Viktor Sandahl's goal at 20 minutes. They've dominated the game with more shots and control, and Sandahl is causing all kinds of trouble for Calderwick.",
+  "trace": {
+   "brief": "Northbridge leads 1-0 at half-time with a superior overall performance: 53% possession, 14 shots (5 on target), and an xG of 1.37 compared to Calderwick's 0.06 xG from just 1 shot. Viktor Sandahl, the match standout, scored the only goal at 20', has taken 11 shots with an xG of 1.31, and shows high involvement with 57 touches and 27 pressures. Northbridge's stronger pressing (ppda 6.83 vs Calderwick 9.5) and higher pass accuracy (82% vs 76%) underline their control. Calderwick experienced a chaotic phase around the 32nd minute which shifted momentum but has yet to convert it into chances.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Viktor Sandahl"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 45
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 45
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "big_chance-021|fan|es|CAL": {
+  "headline": "¡Vaya parada! Viktor Sandahl casi anota para Northbridge",
+  "body": "A los 48 minutos, Sandahl estuvo a punto de empatar para Northbridge desde cerca, pero el portero de Calderwick respondió muy bien para mantener la ventaja.",
+  "trace": {
+   "brief": "",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Viktor Sandahl"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 15
+     }
+    },
+    {
+     "tool": "get_match_state",
+     "arguments": {}
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "momentum_swing-024|fan|es|CAL": {
+  "headline": "¡Calderwick domina el juego ahora!",
+  "body": "En los últimos minutos, Calderwick ha pasado de tener poca presencia a controlar casi toda la acción ofensiva. Aunque siguen perdiendo, ahora parecen tener el balón y la intención de darle la vuelta al partido.",
+  "trace": {
+   "brief": "",
+   "tools": [
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 8
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "pass_milestone-025|fan|en|NBR": {
+  "headline": "Rafael Quintero is running this game",
+  "body": "He's completed 50 passes by the 59th minute with great accuracy. Quintero isn’t afraid to try tough passes, showing why he’s so important for Northbridge.",
+  "trace": {
+   "brief": "Rafael Quintero reaching 50 completed passes from 60 attempts at the 59th minute is significant as it underscores his central role in Northbridge's midfield with an 83% pass accuracy. His average pass difficulty of 49, combined with a hardest pass of 84, highlights his willingness to attempt and succeed with challenging passes, making him a key risk-taking playmaker in the team. Additionally, his contributions go beyond passing with 4 interceptions and 20 pressures, showing a well-rounded midfield performance.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Rafael Quintero"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "line_breaking_pass-031|fan|en|NBR": {
+  "headline": "Rafael Quintero’s stunning pass breaks the defense",
+  "body": "Under pressure and from 32 meters out, Quintero found Emeka Nwosu in the final third, keeping Northbridge’s attack buzzing. That’s the kind of play that can open up the game and lift the team even higher.",
+  "trace": {
+   "brief": "Rafael Quintero's line-breaking pass at 62' traveled 32 meters with a high difficulty of 82 and 69 km/h ball speed, played under pressure. Quintero has a strong pass accuracy of 82% and an average pass difficulty much lower at 49, highlighting how exceptional this long-range pass is. Northbridge has been creating chances recently with 14 final third entries and 5 box entries in the last 15 minutes, maintaining 52% possession and 80% pass accuracy, showing they're pressing forward effectively. This moment matters as it sustains Northbridge's momentum of creating opportunities deep in the final third under pressure.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Rafael Quintero"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 15
+     }
+    },
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": null,
+      "limit": 5
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "line_breaking_pass-031|analyst|en|-": {
+  "headline": "Rafael Quintero's pressured 32m line-breaking pass to Nwosu",
+  "body": "At 62', Quintero executed a highly difficult long-range pass (difficulty 82) over 32 meters at 69 km/h under defensive pressure, advancing the ball into Northbridge's final third. This pass surpasses his usual average difficulty of 49, demonstrating exceptional skill and vision. It reinforces Northbridge's recent attacking momentum, complementing their 14 final third entries and maintaining 52% possession with 80% passing accuracy.",
+  "trace": {
+   "brief": "Rafael Quintero's line-breaking pass at 62' traveled 32 meters with a high difficulty of 82 and 69 km/h ball speed, played under pressure. Quintero has a strong pass accuracy of 82% and an average pass difficulty much lower at 49, highlighting how exceptional this long-range pass is. Northbridge has been creating chances recently with 14 final third entries and 5 box entries in the last 15 minutes, maintaining 52% possession and 80% pass accuracy, showing they're pressing forward effectively. This moment matters as it sustains Northbridge's momentum of creating opportunities deep in the final third under pressure.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Rafael Quintero"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 15
+     }
+    },
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": null,
+      "limit": 5
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "speed_alert-032|fan|es|CAL": {
+  "headline": "¡Jaden Whitlock alcanza 35.5 km/h en el minuto 62!",
+  "body": "Es la carrera más rápida del partido hasta ahora, mostrando lo mucho que está luchando por Calderwick.",
+  "trace": {
+   "brief": "At the 62nd minute, Jaden Whitlock sprinted at 35.5 km/h for 23 meters, the fastest sprint of the match so far. This shows his high engagement with a total of 34 touches, 23 passes with a 74% accuracy, and 18 pressures, indicating a strong overall performance and influence in the game so far.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Jaden Whitlock"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "press_shift-033|fan|es|CAL": {
+  "headline": "¡Calderwick se lanza a presionar con fuerza!",
+  "body": "Desde el cambio, Calderwick ha subido la presión y está recuperando más balones cerca del área rival. Northbridge no encuentra calma y pierde pases, dando una buena oportunidad para empatar.",
+  "trace": {
+   "brief": "Calderwick has significantly increased their pressing intensity in the last 6 minutes, with their press rate rising from 33% to 70%, coinciding with the substitution of Finn Gallagher-Reyes at 61'. This shift led to a drop in Northbridge's pass accuracy from 82% to 72% and resulted in more high recoveries (4), showing Calderwick's aggressive ball-winning in the attacking half. In the last 10 minutes, Calderwick's press rate is 53% and presses have generated a PPDA of 6.33, much lower than Northbridge's 18, underlining their dominance in close pursuit while chasing the game being behind by one goal.",
+   "tools": [
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 10
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 10
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Finn Gallagher-Reyes"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "line_breaking_pass-035|analyst|en|-": {
+  "headline": "El Idrissi's High-Difficulty 34m Line-Breaking Pass Into Calderwick's Box",
+  "body": "At 65', Hamza El Idrissi executed a 91-rated line-breaking pass over 34 meters at 68 km/h, releasing Finn Gallagher-Reyes inside the penalty area despite pressure from a defender. This pass exemplifies Calderwick's sustained attacking momentum, being their 8th box entry in 20 minutes, boosted by El Idrissi's impressive 87% passing accuracy. His long-range creativity consistently stretches Northbridge's defensive structure, keeping Calderwick dangerous in transition.",
+  "trace": {
+   "brief": "Hamza El Idrissi's line-breaking pass in the 65th minute shows his exceptional playmaking under pressure, with a pass difficulty of 91 and a long range of 34 meters, fast at 68 km/h into the box. This mirrors his earlier contribution at the 8th minute, highlighting his consistent threat with high-difficulty long passes. Calderwick have made 8 box entries in the last 20 minutes, with El Idrissi's pass playing a key role in maintaining that attacking momentum, underscored by his 87% pass accuracy across the match.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Hamza El Idrissi"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 20
+     }
+    },
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": "line_breaking_pass",
+      "limit": 3
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "goal-036|fan|es|CAL": {
+  "headline": "¡Gol de Finn Gallagher-Reyes para Calderwick!",
+  "body": "Calderwick iguala el partido tras dominar y presionar sin descanso. Este gol refleja cómo su fuerza y ganas cambian el juego en solo minutos.",
+  "trace": {
+   "brief": "The goal by Finn Gallagher-Reyes at 67' is crucial as it equalizes the score for Calderwick, who had been dominating threat creation with an 87% threat share in the previous 10 minutes. This goal is a direct payoff of Calderwick's raised pressing intensity, reflected in their 70% press rate and high recoveries in the attacking half. Gallagher-Reyes, who came on as a substitute in the 61st minute, has already scored once with 2 shots and 10 pressures, highlighting his immediate impact and confirming his \"super sub\" status.",
+   "tools": [
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": null,
+      "limit": 5
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Finn Gallagher-Reyes"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 10
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "goal-036|fan|en|NBR": {
+  "headline": "Equalizer for Calderwick! Gallagher-Reyes strikes again.",
+  "body": "Northbridge's defense was under pressure as Calderwick kept pushing hard. Their new intensity in pressing paid off, and the super sub made sure the score is level once more.",
+  "trace": {
+   "brief": "The goal by Finn Gallagher-Reyes at 67' is crucial as it equalizes the score for Calderwick, who had been dominating threat creation with an 87% threat share in the previous 10 minutes. This goal is a direct payoff of Calderwick's raised pressing intensity, reflected in their 70% press rate and high recoveries in the attacking half. Gallagher-Reyes, who came on as a substitute in the 61st minute, has already scored once with 2 shots and 10 pressures, highlighting his immediate impact and confirming his \"super sub\" status.",
+   "tools": [
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": null,
+      "limit": 5
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Finn Gallagher-Reyes"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 10
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "line_breaking_pass-038|analyst|en|-": {
+  "headline": "Ilic's pressured 27m line-breaking pass into Calderwick's box",
+  "body": "At 75', Stefan Ilic delivers his hardest pass (difficulty 83) under pressure, covering 27 meters with 25 forward into Calderwick's box to Finn Gallagher-Reyes. Calderwick dominates the last 15 minutes with 58% possession, 10 box entries, and 4 shots, holding a 91% threat share. This pass exemplifies their sustained attacking pressure and chance creation versus Northbridge’s ineffective defense.",
+  "trace": {
+   "brief": "Stefan Ilic's line-breaking pass in the 75th minute came under pressure and covered 27 meters, including 25 forward meters into Calderwick's box. This was his hardest pass of the match, with a difficulty rating of 83, while his overall pass accuracy stands at 76%. Calderwick has dominated the last 15 minutes with 58% possession, 10 box entries, and 4 shots, whereas Northbridge has been less effective, with no shots or box entries. This pass exemplifies Calderwick's increasing attacking threat, contributing to their 91% share of threat in the final quarter.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Stefan Ilic"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 15
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 15
+     }
+    }
+   ],
+   "revisions": 1
+  }
+ },
+ "line_breaking_pass-039|analyst|en|-": {
+  "headline": "Oscar Lindqvist’s Difficult 34m Line-Breaking Pass into Final Third",
+  "body": "At 76 minutes, Lindqvist delivers his hardest pass of the match — a 34-meter ball covering 31 meters forward, with a difficulty rating of 83 under defensive pressure. This precise, high-velocity line-breaking pass contributes to Northbridge’s mounting offensive momentum, marking their 8th final third entry in 15 minutes. It effectively bypasses Calderwick’s midfield press, creating strong positional advantage.",
+  "trace": {
+   "brief": "Oscar Lindqvist's line-breaking pass at 76 minutes stands out with a high difficulty rating of 83 and a long distance of 34 meters, traveling 31 meters forward into the final third under pressure. This is his hardest pass so far with a 75% pass accuracy in the match. Northbridge has made 8 final third entries in the last 15 minutes, indicating increasing offensive momentum. This pass is part of a pattern of high-quality, long-range line-breaking passes seen earlier in the game, with similar difficult passes also noted at minutes 1 and 8 by other players.",
+   "tools": [
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": "line_breaking_pass",
+      "limit": 3
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 15
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Oscar Lindqvist"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "press_shift-041|fan|es|CAL": {
+  "headline": "Northbridge baja la presión y Calderwick gana terreno",
+  "body": "El cansancio se nota y Northbridge presiona menos, dejando que Calderwick controle más el balón y cree más oportunidades.",
+  "trace": {
+   "brief": "Northbridge's pressing intensity has dropped from 34% to 23% in the last 6 minutes while Calderwick's pass accuracy improved from 76% to 82%. Northbridge's press rate is low at 24% with only 1 high recovery, and their possession is 34% with poor pass accuracy (52%). Conversely, Calderwick holds 66% possession, a high pass accuracy of 82%, and a high press rate of 64%, creating greater offensive threat. Fatigue late in the match likely contributes to Northbridge's reduced pressing effectiveness, giving Calderwick more control and chances to attack.",
+   "tools": [
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 6
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 6
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "press_shift-041|analyst|en|-": {
+  "headline": "Northbridge's pressing intensity dips amid late-game fatigue",
+  "body": "In the final 6 minutes, Northbridge's press rate dropped from 34% to 23%, while Calderwick's pass accuracy climbed from 76% to 82%. This decline in pressing, coupled with only one high recovery and a possession share of 34% at a low 52% pass accuracy, cedes control to Calderwick, who now press at 64% and dominate possession at 66%. Fatigue appears to be undermining Northbridge’s defensive effectiveness, increasing Calderwick’s attacking opportunities.",
+  "trace": {
+   "brief": "Northbridge's pressing intensity has dropped from 34% to 23% in the last 6 minutes while Calderwick's pass accuracy improved from 76% to 82%. Northbridge's press rate is low at 24% with only 1 high recovery, and their possession is 34% with poor pass accuracy (52%). Conversely, Calderwick holds 66% possession, a high pass accuracy of 82%, and a high press rate of 64%, creating greater offensive threat. Fatigue late in the match likely contributes to Northbridge's reduced pressing effectiveness, giving Calderwick more control and chances to attack.",
+   "tools": [
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 6
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": 6
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "distance_alert-047|analyst|en|-": {
+  "headline": "Rafael Quintero leads Northbridge with 10.1 km covered",
+  "body": "At 86 minutes, Quintero is the first Northbridge player surpassing 10 km, highlighting his exceptional work rate. His 87 touches and 77% pass accuracy (55/71) demonstrate his central role in ball progression. Defensively, 4 interceptions and 28 pressures underline his significant contribution to Northbridge's transition game.",
+  "trace": {
+   "brief": "Rafael Quintero is the first player on Northbridge to cover over 10 km this match, reaching 10.1 km by the 86th minute. He stands out with 87 touches and has completed 55 of 71 passes, maintaining a 77% pass accuracy. With 4 interceptions and 28 pressures, his defensive work rate is also high, complementing his impressive distance covered of 10.1 km.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Rafael Quintero"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "distance_alert-047|fan|es|CAL": {
+  "headline": "Rafael Quintero del Northbridge supera los 10 km corridos",
+  "body": "Aunque Calderwick pelea fuerte, Quintero muestra una energía impresionante manteniéndose activo hasta el minuto 86, siendo el primero en su equipo en alcanzar esta distancia.",
+  "trace": {
+   "brief": "Rafael Quintero is the first player on Northbridge to cover over 10 km this match, reaching 10.1 km by the 86th minute. He stands out with 87 touches and has completed 55 of 71 passes, maintaining a 77% pass accuracy. With 4 interceptions and 28 pressures, his defensive work rate is also high, complementing his impressive distance covered of 10.1 km.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Rafael Quintero"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "distance_alert-047|fan|en|NBR": {
+  "headline": "Rafael Quintero leads the way with over 10 km run",
+  "body": "By the 86th minute, he's put in a huge effort, covering more ground than anyone else on Northbridge. His hard work in both attack and defense is really driving the team forward.",
+  "trace": {
+   "brief": "Rafael Quintero is the first player on Northbridge to cover over 10 km this match, reaching 10.1 km by the 86th minute. He stands out with 87 touches and has completed 55 of 71 passes, maintaining a 77% pass accuracy. With 4 interceptions and 28 pressures, his defensive work rate is also high, complementing his impressive distance covered of 10.1 km.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Rafael Quintero"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "pass_milestone-049|analyst|en|-": {
+  "headline": "Hamza El Idrissi Hits 75 Completed Passes with 88% Accuracy",
+  "body": "By the 87th minute, El Idrissi has completed 75 of 85 passes at an impressive 88% accuracy, showcasing his reliable ball distribution in midfield. His average pass difficulty of 47 and a peak pass rated at 91 underline his ability to execute both routine and challenging passes effectively. This consistent precision supports Calderwick’s possession control and transition play in the closing stages.",
+  "trace": {
+   "brief": "Hamza El Idrissi has just reached a passing milestone by completing his 75th pass out of 85 attempts with an 88% accuracy in the 87th minute. His average pass difficulty of 47 and hardest pass rated at 91 demonstrate significant contribution in ball distribution. This level of passing accuracy combined with defensive contributions like 3 tackles won and 9 interceptions highlights his pivotal midfield role in Calderwick's performance.",
+   "tools": [
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Hamza El Idrissi"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "goal-050|fan|es|CAL": {
+  "headline": "¡Gol de Finn Gallagher-Reyes para Calderwick en el 87'!",
+  "body": "Calderwick toma la delantera tras una jugada paciente y precisa de 9 pases. Finn, el super-sub, firma su segundo gol y pone a su equipo cerca de la victoria.",
+  "trace": {
+   "brief": "Finn Gallagher-Reyes scored a crucial go-ahead goal for Calderwick in the 87th minute, marking his second goal of the match after coming on as a substitute at 61'. Calderwick dominated the last 10 minutes with 67% possession, 76% threat share, and 8 shots. The goal ended a patient 9-pass sequence over 41 seconds, showcasing Calderwick's sustained pressure with an xG of 0.75 in that period, proving their offensive momentum and control.",
+   "tools": [
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": "goal",
+      "limit": 3
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Finn Gallagher-Reyes"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 10
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "goal-050|fan|en|NBR": {
+  "headline": "Calderwick takes the lead late on with Finn Gallagher-Reyes' second",
+  "body": "Tough break for Northbridge as Calderwick's pressure pays off after a patient build-up. Now Northbridge has just minutes to try and turn this around.",
+  "trace": {
+   "brief": "Finn Gallagher-Reyes scored a crucial go-ahead goal for Calderwick in the 87th minute, marking his second goal of the match after coming on as a substitute at 61'. Calderwick dominated the last 10 minutes with 67% possession, 76% threat share, and 8 shots. The goal ended a patient 9-pass sequence over 41 seconds, showcasing Calderwick's sustained pressure with an xG of 0.75 in that period, proving their offensive momentum and control.",
+   "tools": [
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": "goal",
+      "limit": 3
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Finn Gallagher-Reyes"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 10
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "goal-050|analyst|en|-": {
+  "headline": "Gallagher-Reyes' 87' strike puts Calderwick ahead with clinical finish",
+  "body": "Finn Gallagher-Reyes scores his second of the match after a patient 9-pass buildup over 41 seconds, converting a 0.15 xG chance from 8 meters at 112 km/h. Calderwick dominated the preceding 10 minutes, creating 72% of the threat and accumulating 8 shots with an overall xG of 0.75, underscoring sustained offensive control. Coming on as a substitute at 61', his goal at 87' breaks the deadlock in a tightly contested game with little time for Northbridge to respond.",
+  "trace": {
+   "brief": "Finn Gallagher-Reyes scored a crucial go-ahead goal for Calderwick in the 87th minute, marking his second goal of the match after coming on as a substitute at 61'. Calderwick dominated the last 10 minutes with 67% possession, 76% threat share, and 8 shots. The goal ended a patient 9-pass sequence over 41 seconds, showcasing Calderwick's sustained pressure with an xG of 0.75 in that period, proving their offensive momentum and control.",
+   "tools": [
+    {
+     "tool": "list_key_moments",
+     "arguments": {
+      "kind": "goal",
+      "limit": 3
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Finn Gallagher-Reyes"
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": 10
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "recap-056|fan|es|CAL": {
+  "headline": "Final: Northbridge 1-2 Calderwick, ¡gran remontada!",
+  "body": "Calderwick mostró mucha garra para darle la vuelta al partido y ganar 2-1 gracias a los dos goles de Finn Gallagher-Reyes. Tras su entrada, Calderwick apretó más y logró que Northbridge cometiera más errores, cambiando el juego.",
+  "trace": {
+   "brief": "Calderwick's 2-1 victory over Northbridge was secured by Finn Gallagher-Reyes, who scored both goals for the comeback after trailing 0-1. Calderwick had less than half the shots Northbridge had (9 vs 17) but were more efficient with a 0.83 xG compared to Northbridge's 2.04. Gallagher-Reyes himself had a solid game with 5 shots, 2 goals, and an xG of 0.63, showing clinical finishing. Calderwick's pressing effort increased significantly after his introduction, coinciding with a drop in Northbridge's pass accuracy from 82% to 72%, a key moment that turned the tide from minute 61 onwards.",
+   "tools": [
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": null
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": null
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Finn Gallagher-Reyes"
+     }
+    }
+   ],
+   "revisions": 0
+  }
+ },
+ "recap-056|fan|en|NBR": {
+  "headline": "Full-time: Northbridge 1-2 Calderwick",
+  "body": "A bitter finish for Northbridge as Calderwick complete a late comeback. Finn Gallagher-Reyes scored twice after coming on, turning the game around with a strong pressing effort that shut down our passes.",
+  "trace": {
+   "brief": "Calderwick's 2-1 victory over Northbridge was secured by Finn Gallagher-Reyes, who scored both goals for the comeback after trailing 0-1. Calderwick had less than half the shots Northbridge had (9 vs 17) but were more efficient with a 0.83 xG compared to Northbridge's 2.04. Gallagher-Reyes himself had a solid game with 5 shots, 2 goals, and an xG of 0.63, showing clinical finishing. Calderwick's pressing effort increased significantly after his introduction, coinciding with a drop in Northbridge's pass accuracy from 82% to 72%, a key moment that turned the tide from minute 61 onwards.",
+   "tools": [
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Calderwick",
+      "last_minutes": null
+     }
+    },
+    {
+     "tool": "get_team_stats",
+     "arguments": {
+      "team": "Northbridge",
+      "last_minutes": null
+     }
+    },
+    {
+     "tool": "get_player_stats",
+     "arguments": {
+      "player": "Finn Gallagher-Reyes"
+     }
+    }
+   ],
+   "revisions": 0
+  }
  }
 }
