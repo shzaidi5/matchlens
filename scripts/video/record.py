@@ -91,7 +91,22 @@ def publisher() -> subprocess.Popen:
     )
 
 
+def wait_until_caught_up() -> None:
+    """A fresh replica replays the hub's retention first; a live viewer must not join mid catch-up."""
+    last = None
+    for _ in range(60):
+        live = json.load(urllib.request.urlopen(f"{URL}/api/match", timeout=120))["live"]
+        state = (live["run"], live["events"], live["ended"])
+        if state == last and (live["ended"] or live.get("stale")):
+            print(f"live feed settled on run {live['run']}")
+            return
+        last = state
+        time.sleep(5)
+    sys.exit("live feed never settled")
+
+
 async def main() -> None:
+    wait_until_caught_up()
     durations = json.loads((OUT / "durations.json").read_text())
     markers = json.load(urllib.request.urlopen(f"{URL}/api/insights", timeout=120))
     shift_t, equaliser_t = marker(markers, "press_shift", "63'"), marker(markers, "goal", "67'")

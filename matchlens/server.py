@@ -194,9 +194,10 @@ async def stream(
         desk = pipe.narrator if isinstance(pipe.narrator, EditorialDesk) else None
         if feed is not None:  # join the live run where it is: catch up silently, then follow
             feed.start()
+            joinable = feed.joinable()
             backlog, queue = feed.subscribe()
-            if backlog and backlog[-1]["type"] == "match_end":
-                backlog = []  # that match is over: wait for the next kick-off
+            if not joinable:
+                backlog = []  # that match is over or was abandoned: wait for the next kick-off
             pipe.fast_forward(backlog, float("inf"))
             now = backlog[-1]["t"] if backlog else 0.0
             batches = feed.follow(queue, now, fresh=not backlog)

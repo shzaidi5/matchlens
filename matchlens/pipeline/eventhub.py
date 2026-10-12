@@ -21,6 +21,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import time
 import uuid
 from typing import Any, AsyncIterator, Awaitable, Callable, Iterable
 
@@ -134,6 +135,7 @@ def eventhub_source(cfg: dict[str, str]) -> Source:
     return source
 
 
+STALE_AFTER_S = 30.0  # a run that has gone quiet this long was abandoned (the provider stopped mid-match)
 NEW_RUN = object()  # sent to followers when a new kick-off replaces the run they were watching
 
 
@@ -147,6 +149,7 @@ class LiveFeed:
         self.events: list[dict[str, Any]] = []
         self.rejected = 0
         self.error: str | None = None
+        self.received_at = 0.0  # monotonic time of the last accepted event
         self._followers: set[asyncio.Queue] = set()
         self._task: asyncio.Task | None = None
 
@@ -162,6 +165,7 @@ class LiveFeed:
             "events": len(self.events),
             "last_t": self.events[-1]["t"] if self.events else None,
             "ended": self.ended,
+            "stale": self.stale,
             "rejected": self.rejected,
             "error": self.error,
         }
@@ -169,6 +173,14 @@ class LiveFeed:
     @property
     def ended(self) -> bool:
         return bool(self.events) and self.events[-1]["type"] == "match_end"
+
+    @property
+    def stale(self) -> bool:
+        return bool(self.events) and time.monotonic() - self.received_at > STALE_AFTER_S
+
+    def joinable(self) -> bool:
+        """True while the current run is in progress; otherwise a new viewer waits for the next kick-off."""
+        return bool(self.events) and not self.ended and not self.stale
 
     async def _pump(self) -> None:
         try:
@@ -194,6 +206,7 @@ class LiveFeed:
             self.rejected += 1  # duplicate or out of order: the hub redelivers on reconnect
             return
         self.events.append(ev)
+        self.received_at = time.monotonic()
         for q in self._followers:
             q.put_nowait(ev)
 

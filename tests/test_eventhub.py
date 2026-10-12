@@ -156,3 +156,14 @@ def test_settings_come_from_the_environment(monkeypatch):
     assert eventhub.settings() is None
     monkeypatch.setenv("EVENTHUB_NAMESPACE", "ns.servicebus.windows.net")
     assert eventhub.settings() == {"namespace": "ns.servicebus.windows.net", "name": "match-events"}
+
+
+def test_a_run_that_goes_quiet_is_not_joinable(match):
+    meta, events = match
+    feed = LiveFeed(meta["match_id"], fake_source([]))
+    assert not feed.joinable()  # nothing yet
+    for ev in events[:100]:
+        feed.accept({"match_id": meta["match_id"], "run": "r1"}, ev)
+    assert feed.joinable()
+    feed.received_at -= eventhub.STALE_AFTER_S + 1  # the provider stopped mid-match
+    assert feed.stale and not feed.joinable() and feed.status()["stale"] is True
