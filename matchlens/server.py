@@ -17,7 +17,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, StreamingResponse
 from pydantic import BaseModel
 
@@ -30,6 +30,7 @@ from .pipeline.eventhub import LiveFeed, eventhub_source, settings as eventhub_s
 from .pipeline.ingest import load_match, replay
 from .pipeline.orchestrator import NarrationJob, Pipeline, arun_match, run_match
 from .pipeline.render import to_webvtt
+from .ratelimit import Limits
 from .synth import write_match
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -97,6 +98,7 @@ def match() -> Match:
 
 
 _live: LiveFeed | None = None
+limits = Limits()
 
 
 def live_feed() -> LiveFeed | None:
@@ -178,6 +180,7 @@ def _late(cues: dict[str, list[Cue]], now: float) -> dict[str, list[Cue]]:
 
 @app.get("/api/stream")
 async def stream(
+    request: Request,
     profiles: str | None = None,
     speed: float = Query(30.0, ge=0.5, le=240.0),
     start: float = Query(0.0, ge=0.0),
@@ -188,8 +191,10 @@ async def stream(
     feed = live_feed() if source == "live" else None
     if source == "live" and feed is None:
         raise HTTPException(503, "Live ingest is off. Set EVENTHUB_NAMESPACE (see .env.example).")
+    ip = limits.check_stream(request)
 
     async def generate():
+        limits.open_stream(ip)  # counted here, not before: a stream that never starts never closes
         pipe = m.pipeline(viewer_profiles)
         desk = pipe.narrator if isinstance(pipe.narrator, EditorialDesk) else None
         if feed is not None:  # join the live run where it is: catch up silently, then follow
@@ -254,6 +259,7 @@ async def stream(
                     yield _sse("tick", {"t": round(now, 2), "state": pipe.state.snapshot(), "cues": late})
             yield _sse("end", {"state": pipe.state.snapshot()})
         finally:
+            limits.close_stream(ip)
             if feed is not None:
                 feed.unsubscribe(queue)
             for task, _ in writing:
@@ -273,10 +279,11 @@ class Ask(BaseModel):
 
 
 @app.post("/api/ask")
-async def ask(body: Ask) -> dict[str, Any]:
+async def ask(body: Ask, request: Request) -> dict[str, Any]:
     m = match()
     if m.client is None:
         raise HTTPException(503, "Ask needs a model. Set FOUNDRY_PROJECT_ENDPOINT and FOUNDRY_MODEL (see .env.example).")
+    limits.ask(request)
     question = body.question.strip()
     if not question or len(question) > 500:
         raise HTTPException(400, "question must be 1-500 characters")

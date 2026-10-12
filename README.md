@@ -43,7 +43,7 @@ python -m matchlens run --agents --profile fan:fr:CAL                  # same, w
 python -m matchlens export --profile fan:es:CAL --format vtt > fan.vtt  # overlay track as WebVTT
 python -m matchlens generate --seed 42 --name my_match                 # write a new synthetic match
 python scripts/eval_detectors.py                                       # score detectors against ground truth
-pytest                                                                 # 88 tests, no network needed
+pytest                                                                 # 94 tests, no network needed
 ```
 
 To feed the viewer live through Azure Event Hubs instead of the recorded file, set `EVENTHUB_NAMESPACE` in `.env`, run `serve`, pick **Live: Event Hubs** in the viewer, and in a second terminal start the feed:
@@ -198,6 +198,7 @@ On the sample match the analyst profile gets 28 lower-third overlays and a Spani
 | Microsoft Foundry model through `FoundryChatClient`, Microsoft Entra ID auth | Run live (`agents/client.py`): `python -m matchlens check` against a Foundry project with a `gpt-4.1-mini` deployment. The analyst made 3 tool calls, both pieces passed the fact checker with no revisions, and there was no template fallback. Your account needs the **Foundry User** role on the resource. An Azure OpenAI resource also works. |
 | Azure Container Apps for the API and viewer | Deployed: https://matchlens.greenmoss-a99bb9ec.eastus2.azurecontainerapps.io. GitHub Actions (`.github/workflows/deploy.yml`) runs the tests, builds the image, pushes it to Azure Container Registry, deploys it and smoke-tests `/api/health`. CI signs in to Azure with OIDC, so no secrets are stored. The app reaches Foundry as a user-assigned managed identity, so it holds no keys either. `POST /api/ask` has been answered live from the cloud: grounded, with 4 tool calls. |
 | Azure Event Hubs for live ingest | Built and run live, locally and in the Container Apps deployment. `publish` sends the match keyed by match id, so it stays ordered on one partition, and tags each message with a run id. The server's consumer reads from the start of retention, so a restarted or scaled-from-zero replica rebuilds the current match. Duplicates and out-of-order redeliveries are rejected. Auth is Entra-only: key auth is disabled on the namespace, the publisher has Data Sender, and the app's managed identity has Data Receiver. In a live test, a viewer waited for kick-off, then followed a 240x run through the hub to the final score (126 ticks, 102 overlay cues). Against the deployed app, a viewer on the public URL got 150 ticks and 102 cues. Some cues were written live by the Foundry agents; at 240x the rest fell back to templates. |
+| Abuse and cost limits | Built (`matchlens/ratelimit.py`). The public endpoints that can spend model tokens are limited: 5 questions per visitor per minute and 500 per replica per day, and at most 4 open streams per visitor. Visitors are identified by the address the Container Apps ingress appends to `X-Forwarded-For`. An Azure budget of $25 a month on `matchlens-rg` emails at 50%, 80% and 100% of actual spend, and on a forecast overrun. |
 
 ## Coverage of the brief
 

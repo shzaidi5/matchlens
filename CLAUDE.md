@@ -22,7 +22,7 @@ Synthetic football events in, explainable and personalized match intelligence ou
 - Next: rate-limit public endpoints plus a budget alert, refresh docs/screenshot.png, bump workflow actions, then submit by Oct 27.
 
 ## Conventions
-- `pytest` must pass with no network: 88 tests, using a scripted Agent Framework client (`tests/fakes.py`).
+- `pytest` must pass with no network: 94 tests, using a scripted Agent Framework client (`tests/fakes.py`).
 - No number may reach the screen unless the pipeline or a tool computed it. Keep `grounding.py` and the fact checker strict.
 - Detector thresholds live in `Thresholds` (moments.py). Re-run `python scripts/eval_detectors.py` after changing them, and update the README figures (currently 23 of 30 detected, 4 false alarms).
 - Keep README claims true: state what has and hasn't been run live.
