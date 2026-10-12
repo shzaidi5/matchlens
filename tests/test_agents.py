@@ -51,7 +51,9 @@ def test_match_tools(run):
     assert tools.get_team_stats("calderwick")["shots"] == 9
     assert tools.get_team_stats("CAL", last_minutes=10)["window"] == "last 10 min"
     assert tools.get_player_stats("gallagher")["goals"] == 2
-    assert "error" in tools.get_team_stats("Real Madrid")
+    assert "error" in tools.get_team_stats("Nonexistent FC")
+    assert "get_team_stats" in tools.get_player_stats("Calderwick")["hint"]  # a club name, not a player
+    assert "hint" not in tools.get_player_stats("Nobody")
     assert all(m["kind"] == "press_shift" for m in tools.list_key_moments(kind="press_shift"))
     assert [c["tool"] for c in tools.calls][:2] == ["get_match_state", "get_team_stats"]
     assert {9.0, 2.0} <= tools.evidence

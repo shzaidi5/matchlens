@@ -96,7 +96,10 @@ class MatchTools:
         needle = player.strip().lower()
         matches = [pid for pid, p in s.players.items() if needle and needle in p["name"].lower()]
         if not matches:
-            return self._record("get_player_stats", {"player": player}, {"error": f"no player matching '{player}'"})
+            error: dict[str, Any] = {"error": f"no player matching '{player}'"}
+            if player.strip() and self._team_id(player):  # a club name: point the model at the right tool instead of a dead end
+                error["hint"] = f"'{player}' is a team. Call get_team_stats or list_key_moments instead."
+            return self._record("get_player_stats", {"player": player}, error)
         card = s.player_card(matches[0])
         card["team"] = s.team_name(card["team"])
         for key in ("pass_accuracy", "avg_pass_difficulty"):
