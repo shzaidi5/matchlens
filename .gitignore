@@ -5,3 +5,4 @@ __pycache__/
 .env
 *.vtt
 build/
+CLAUDE.md
