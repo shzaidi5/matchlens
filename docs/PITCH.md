@@ -12,6 +12,8 @@ Built with Microsoft Agent Framework on a Microsoft Foundry model (gpt-4.1-mini)
 
 ### Generated version
 
+Published: https://www.youtube.com/watch?v=BM85OdtaQu8
+
 `build/video/matchlens-demo.mp4` (1:48, 1080p) is recorded automatically from the deployed app, with an Azure AI Speech voiceover and `.srt` captions:
 
 ```bash
